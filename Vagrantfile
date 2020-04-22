@@ -13,4 +13,21 @@ Vagrant.configure("2") do |config|
     vb.memory = 2048
   end
 
+  config.vm.provision "environment-file", type: "file", source: "ubuntu.env", destination: "/tmp/ubuntu.sh"
+  config.vm.provision "setup-environment", type: "shell", inline: "mv /tmp/ubuntu.sh /etc/profile.d/"
+
+  config.vm.provision "setup", type: "shell", inline: $setup
+
 end
+
+$setup = <<SCRIPT
+set -euo pipefail
+export DEBIAN_FRONTEND=noninteractive
+apt-get -qq update
+apt-get install -y \
+  linux-tools-common \
+  build-essential \
+  dstat \
+  ngrep \
+  tldr
+SCRIPT
