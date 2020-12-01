@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/bionic64"
+  config.vm.box = "ubuntu/focal64"
 
   config.vm.define "ubuntu" 
   config.vm.hostname = "ubuntu"
@@ -11,6 +11,7 @@ Vagrant.configure("2") do |config|
     vb.name = "ubuntu"
     vb.cpus = 2
     vb.memory = 2048
+    vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
   end
 
   config.vm.provision "environment-file", type: "file", source: "ubuntu.env", destination: "/tmp/ubuntu.sh"
